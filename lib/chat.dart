@@ -21,8 +21,6 @@ class UserData {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  Color c1 = const Color.fromRGBO(168, 214, 240, 0.8);
-  Color c2 = const Color.fromRGBO(28, 147, 212, 1.0);
   TextEditingController _controller = TextEditingController();
   SocketIO socket = new SocketIOManager().createSocketIO(
     "https://flutter-chat-1.herokuapp.com/",
