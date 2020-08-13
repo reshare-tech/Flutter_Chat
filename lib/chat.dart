@@ -1,8 +1,7 @@
+import 'dart:convert';
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
 import 'package:flutter_socket_io/socket_io_manager.dart';
-import "package:web_socket_channel/web_socket_channel.dart";
-import "package:web_socket_channel/io.dart";
 import 'package:keyboard_attachable/keyboard_attachable.dart';
 import 'package:flutter_socket_io/flutter_socket_io.dart';
 
@@ -15,9 +14,9 @@ class MyStatefulWidget extends StatefulWidget {
 class UserData {
   String name;
   String value;
-  UserData(String name, String value) {
-    name = this.name;
-    value = this.value;
+  UserData(String n, String v) {
+    name = n;
+    value = v;
   }
 }
 
@@ -25,22 +24,26 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Color c1 = const Color.fromRGBO(168, 214, 240, 0.8);
   Color c2 = const Color.fromRGBO(28, 147, 212, 1.0);
   TextEditingController _controller = TextEditingController();
-  SocketIO socket = new SocketIOManager().createSocketIO("ws://echo.websocket.org"," ");
-  List<UserData> myText = [];
+  SocketIO socket = new SocketIOManager().createSocketIO(
+    "https://flutter-chat-1.herokuapp.com/",
+    "/",
+  );
+  List<String> myText = [];
+  List<UserData> textChat = [];
 
-  _MyStatefulWidgetState() {
-    channel.stream.asBroadcastStream().listen((data) {
-      setState(() {
-        myText.add(data);
+  void initState() {
+    socket.init();
+    socket.subscribe("receive_message", (data) {
+      Map<String, dynamic> map = json.decode(data);
+      this.setState(() {
+        textChat.add(UserData(map['name'], map['value']));
       });
     });
-  }
-  void initState() {
+    socket.connect();
     super.initState();
   }
 
   void dispose() {
-    channel.sink.close();
     super.dispose();
   }
 
@@ -56,14 +59,23 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             appBar: AppBar(
               centerTitle: true,
               actions: [
-                new IconButton(
-                    icon: new Icon(Icons.close),
-                    onPressed: () {
-                      SystemNavigator.pop();
-                    })
+                OutlineButton(
+                  onPressed: () {
+                    SystemNavigator.pop();
+                  },
+                  child: Text(
+                    "Exit",style:TextStyle(fontSize: 16),
+                  ),
+                  textColor: Colors.white,
+                  borderSide: BorderSide.none,
+                )
               ],
-              title: Text("Flutter Chat"),
-              backgroundColor: Colors.blue[300],
+              title: Text(
+                "Chatroom",
+                style: TextStyle(
+                  fontSize: 23,
+                ),
+              ),
             ),
             body: Container(
                 padding: EdgeInsets.all(20.0),
@@ -76,7 +88,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                           margin: EdgeInsets.only(bottom: 10.0),
                           decoration: BoxDecoration(),
                           child: ListView.builder(
-                            itemCount: myText.length,
+                            itemCount: textChat.length,
                             reverse: true,
                             itemBuilder: (context, index) {
                               return Container(
@@ -91,12 +103,14 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                                           Border.all(color: Colors.blue[300])),
                                   child: ListTile(
                                     title: Text(
-                                      myText[myText.length - index - 1].name,
+                                      textChat[textChat.length - index - 1]
+                                          .name,
                                       style: TextStyle(
                                           fontSize: 15.0, color: Colors.black),
                                     ),
                                     subtitle: Text(
-                                      myText[myText.length - index - 1].value,
+                                      textChat[textChat.length - index - 1]
+                                          .value,
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           color: Colors.black,
@@ -133,9 +147,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                           child: RaisedButton(
                             onPressed: () {
                               if (_controller.text.isNotEmpty) {
-                                UserData data = new UserData(
-                                    widget.myName, _controller.text);
-                                channel.sink.add(data);
+                                socket.sendMessage(
+                                    "send_message",
+                                    json.encode({
+                                      "name": widget.myName,
+                                      "value": _controller.text
+                                    }));
+                                this.setState(() {
+                                  textChat.add(UserData(
+                                      widget.myName, _controller.text));
+                                });
                                 _controller.clear();
                                 currentFocus.unfocus();
                               }

@@ -9,6 +9,7 @@ app.get("/",(req,res)=>{
 socket.on("connection",(userSocket)=>{
     userSocket.on("send_message",(data)=>{
         userSocket.broadcast.emit("receive_message",data);
+        console.log("Recieved message at server");
     }
     )
 })

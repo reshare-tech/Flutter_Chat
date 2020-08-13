@@ -34,7 +34,7 @@ class IndexPageState extends State<IndexPageStateful> {
         home: Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text("Flutter Chat"),
+              title: Text("Flutter Chat",style: TextStyle(fontSize: 23),),
               backgroundColor: Colors.blue[300],
             ),
             body: Container(
