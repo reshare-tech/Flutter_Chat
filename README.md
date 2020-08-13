@@ -1,6 +1,7 @@
 # Flutter Chat
 
-A simple chat application built using Flutter.
+A simple chat application built using Flutter.<br/>
+Download the apk file at : http://www.mediafire.com/file/r5w2wyil33h3agc/app-release.apk/file
 
 ## Getting Started
 
