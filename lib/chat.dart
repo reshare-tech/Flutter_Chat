@@ -76,7 +76,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               ),
             ),
             body: Container(
-                padding: EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(10.0),
                 child: Column(children: <Widget>[
                   Expanded(
                       child: Container(
@@ -84,27 +84,31 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                           width: 380,
                           padding: EdgeInsets.all(5.0),
                           margin: EdgeInsets.only(bottom: 10.0),
-                          decoration: BoxDecoration(),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(10.0))
+                          ),
                           child: ListView.builder(
                             itemCount: textChat.length,
                             reverse: true,
                             itemBuilder: (context, index) {
                               return Container(
-                                  padding: EdgeInsets.all(5.0),
-                                  margin:
-                                      EdgeInsets.only(bottom: 7.0, top: 7.0),
+                                  margin : EdgeInsets.only(bottom:4.0,top:4.0,left: 10.0,right: 10.0),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                      color: Colors.blue[50],
-                                      border:
-                                          Border.all(color: Colors.blue[300])),
-                                  child: ListTile(
+                                          Radius.circular(10.0))),
+                                  child: Card(
+                                    color: Color.fromRGBO(249, 249, 252, 1.0),
+                                    shadowColor: Colors.black,
+                                    elevation: 3.0,
+                                    borderOnForeground: true,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(9.0))),
+                                    child : ListTile(
                                     title: Text(
                                       textChat[textChat.length - index - 1]
                                           .name,
                                       style: TextStyle(
-                                          fontSize: 15.0, color: Colors.black),
+                                          fontSize: 15.0, color: Colors.black,fontWeight: FontWeight.w300),
                                     ),
                                     subtitle: Text(
                                       textChat[textChat.length - index - 1]
@@ -112,32 +116,34 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           color: Colors.black,
-                                          fontWeight: FontWeight.w500),
+                                          fontWeight: FontWeight.w400),
                                     ),
-                                  ));
+                                  )));
                             },
                           ))),
                   Container(
                       child: KeyboardAttachable(
                           child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
                           height: deviceHeight * 0.09,
-                          width: deviceWidth * 0.62,
+                          width: deviceWidth * 0.66,
                           child: TextField(
                             textCapitalization: TextCapitalization.sentences,
                             controller: _controller,
                             style: TextStyle(fontSize: 19),
                             decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
                                 hintText: "Type your message",
                                 contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 10.0, vertical: 15.0),
+                                    horizontal: 15.0, vertical: 15.0),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(
-                                        Radius.circular(5.0)))),
+                                        Radius.circular(24.0)))),
                           )),
                       Container(
                           width: deviceWidth * 0.25,
