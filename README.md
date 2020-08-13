@@ -1,6 +1,6 @@
-# flutter_app
+# Flutter Chat
 
-A new Flutter project.
+A simple chat application built using Flutter.
 
 ## Getting Started
 
